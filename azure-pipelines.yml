@@ -119,9 +119,6 @@ jobs:
         manifests: |
           $(Pipeline.Workspace)/manifests/web-data.yaml
           $(Pipeline.Workspace)/manifests/web-config.yaml
-          $(Pipeline.Workspace)/manifests/web-deploy.yaml
-          $(Pipeline.Workspace)/manifests/web-job-ingress-add-host.yaml
-          $(Pipeline.Workspace)/manifests/web-cron-job-ingress-remove-host.yaml
-          $(Pipeline.Workspace)/manifests/web-cron-job-run-delete-deploy.yaml
+          
       displayName: 'Deploy web'
     
