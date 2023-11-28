@@ -1,0 +1,29 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: web-cleanup-cron-job-$(deploymentName)
+spec:
+  schedule: "$(useTimeMinute) $(currentHour) */1 * *"
+  successfulJobsHistoryLimit: 0
+  failedJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          serviceAccountName: account-service
+          restartPolicy: OnFailure
+          containers:
+          - name: cleanup-container
+            image: bitnami/kubectl
+            command: 
+            - "sh"
+            - "-c"
+            - >
+              kubectl delete deployment web-deploy-$(deploymentName) &&
+              kubectl delete service web-clusterip-srv-$(deploymentName) &&
+              kubectl delete service web-loadbalance-srv-$(deploymentName) &&
+              kubectl delete PersistentVolumeClaim web-volume-claim-$(deploymentName)
+              kubectl delete PersistentVolumeClaim web-volume-claim-log-$(deploymentName)
+              kubectl delete ConfigMap web-config-$(deploymentName)
+              sleep 300 &&
+              kubectl delete cronjob web-cleanup-cron-job-$(deploymentName)

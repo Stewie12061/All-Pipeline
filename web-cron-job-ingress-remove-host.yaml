@@ -1,0 +1,32 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: web-remove-ingress-cronjob-$(deploymentName)
+spec:
+  schedule: "43 6 */1 * *"
+  successfulJobsHistoryLimit: 0
+  failedJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          nodeSelector:
+            beta.kubernetes.io/os: windows
+          serviceAccountName: account-service
+          restartPolicy: OnFailure
+          containers:
+          - name: remove-host-container
+            image: mcr.microsoft.com/windows/servercore:ltsc2022
+            command:
+              - "powershell"
+              - "-Command"
+              - |
+                Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
+                choco install kubernetes-cli -y
+                choco install jq -y
+                # Run kubectl commands with debugging statements
+                $INDEX = kubectl get ingress web-ingress-route -o=json | jq -r '.spec.rules[].host' | Select-String -Pattern "$(deploymentName)web.minhnhut.online" | ForEach-Object { $_.LineNumber }
+                Write-Output "INDEX: $INDEX"
+                kubectl patch ingress web-ingress-route -n default --type=json -p="[{'op': 'remove', 'path': '/spec/rules/$($INDEX-1)'}]"
+                Start-Sleep -Seconds 300
+                kubectl delete cronjob web-remove-ingress-cronjob-$(deploymentName)
