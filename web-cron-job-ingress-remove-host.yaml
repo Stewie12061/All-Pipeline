@@ -3,7 +3,7 @@ kind: CronJob
 metadata:
   name: web-remove-ingress-cronjob-$(deploymentName)
 spec:
-  schedule: "43 6 */1 * *"
+  schedule: "$(useTimeMinute) $(currentHour) */1 * *"
   successfulJobsHistoryLimit: 0
   failedJobsHistoryLimit: 1
   jobTemplate:
