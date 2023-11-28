@@ -10,20 +10,24 @@ spec:
     spec:
       template:
         spec:
+          nodeSelector:
+            beta.kubernetes.io/os: windows
           serviceAccountName: account-service
           restartPolicy: OnFailure
           containers:
-          - name: cleanup-container
-            image: bitnami/kubectl
-            command: 
-            - "sh"
-            - "-c"
-            - >
-              kubectl delete deployment web-deploy-$(deploymentName) &&
-              kubectl delete service web-clusterip-srv-$(deploymentName) &&
-              kubectl delete service web-loadbalance-srv-$(deploymentName) &&
-              kubectl delete PersistentVolumeClaim web-volume-claim-$(deploymentName)
-              kubectl delete PersistentVolumeClaim web-volume-claim-log-$(deploymentName)
-              kubectl delete ConfigMap web-config-$(deploymentName)
-              sleep 300 &&
-              kubectl delete cronjob web-cleanup-cron-job-$(deploymentName)
+          - name: remove-host-container
+            image: mcr.microsoft.com/windows/servercore:ltsc2022
+            command:
+              - "powershell"
+              - "-Command"
+              - |
+                Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
+                choco install kubernetes-cli -y
+                kubectl delete deployment web-deploy-$(deploymentName) &&
+                kubectl delete service web-clusterip-srv-$(deploymentName) &&
+                kubectl delete service web-loadbalance-srv-$(deploymentName) &&
+                kubectl delete PersistentVolumeClaim web-volume-claim-$(deploymentName)
+                kubectl delete PersistentVolumeClaim web-volume-claim-log-$(deploymentName)
+                kubectl delete ConfigMap web-config-$(deploymentName)
+                sleep 300 &&
+                kubectl delete cronjob web-cleanup-cron-job-$(deploymentName)
