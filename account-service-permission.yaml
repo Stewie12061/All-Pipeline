@@ -8,21 +8,24 @@ kind: Role
 metadata:
   name: account-service-role
 rules:
-- apiGroups: [""]
-  resources: ["*"]
-  verbs: ["*"]
 - apiGroups: ["apps"]
-  resources: ["*"]
-  verbs: ["*"]
+  resources: ["deployments"]
+  verbs: ["delete"]
+- apiGroups: [""]
+  resources: ["services"]
+  verbs: ["delete"]
 - apiGroups: ["batch"]
-  resources: ["*"]
-  verbs: ["*"]
-- apiGroups: ["extensions"]
-  resources: ["*"]
-  verbs: ["*"]
+  resources: ["cronjobs"]
+  verbs: ["delete"]
 - apiGroups: ["networking.k8s.io"]
-  resources: ["*"]
-  verbs: ["*"]
+  resources: ["ingresses"]
+  verbs: ["get", "patch"]
+- apiGroups: [""]
+  resources: ["persistentvolumeclaims"]
+  verbs: ["create", "delete"]
+- apiGroups: [""]
+  resources: ["configmaps"]
+  verbs: ["get", "delete"]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
