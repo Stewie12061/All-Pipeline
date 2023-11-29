@@ -25,7 +25,7 @@ spec:
                 choco install kubernetes-cli -y
                 kubectl delete deployment web-deploy-$(deploymentName) &&
                 kubectl delete service web-clusterip-srv-$(deploymentName) &&
-                kubectl delete service web-loadbalance-srv-$(deploymentName) &&
+                #kubectl delete service web-loadbalance-srv-$(deploymentName) &&
                 kubectl delete PersistentVolumeClaim web-volume-claim-$(deploymentName)
                 kubectl delete PersistentVolumeClaim web-volume-claim-log-$(deploymentName)
                 kubectl delete ConfigMap web-config-$(deploymentName)
