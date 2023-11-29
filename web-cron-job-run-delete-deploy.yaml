@@ -23,10 +23,10 @@ spec:
               - |
                 Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
                 choco install kubernetes-cli -y
-                kubectl delete deployment web-deploy-$(deploymentName) &&
-                kubectl delete service web-clusterip-srv-$(deploymentName) &&
-                kubectl delete PersistentVolumeClaim web-volume-claim-$(deploymentName)
-                kubectl delete PersistentVolumeClaim web-volume-claim-log-$(deploymentName)
-                kubectl delete ConfigMap web-config-$(deploymentName)
-                sleep 300 &&
+                kubectl delete deployment web-deploy-$(deploymentName) ;
+                kubectl delete service web-clusterip-srv-$(deploymentName) ;
+                kubectl delete PersistentVolumeClaim web-volume-claim-$(deploymentName) ;
+                kubectl delete PersistentVolumeClaim web-volume-claim-log-$(deploymentName) ;
+                kubectl delete ConfigMap web-config-$(deploymentName) ;
+                Start-Sleep -Seconds 300 ;
                 kubectl delete cronjob web-cleanup-cron-job-$(deploymentName)
