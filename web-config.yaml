@@ -29,8 +29,8 @@ data:
       </businessObjects>
       <!-- SQL Connection string config -->
       <connectionStrings>
-        <add name="ASOFT_ERP" providerName="System.Data.SqlClient" connectionString="Server=20.247.144.23;Database=1BOSS_$(deploymentName);User ID=sa; Password=pa55w0rd!; Trusted_Connection=False;" />  
-        <add name="ASOFT_ADMIN" providerName="System.Data.SqlClient" connectionString="Server=20.247.144.23;Database=AS_ADMIN_1BOSS_$(deploymentName);User ID=sa; Password=pa55w0rd!; Trusted_Connection=False;"/> 
+        <add name="ASOFT_ERP" providerName="System.Data.SqlClient" connectionString="Server=mssql.minhnhut.online;Database=1BOSS_$(deploymentName);User ID=sa; Password=pa55w0rd!; Trusted_Connection=False;" />  
+        <add name="ASOFT_ADMIN" providerName="System.Data.SqlClient" connectionString="Server=mssql.minhnhut.online;Database=AS_ADMIN_1BOSS_$(deploymentName);User ID=sa; Password=pa55w0rd!; Trusted_Connection=False;"/> 
       </connectionStrings>
       <appSettings>
         <add key="TimeReload" value="90000" />
