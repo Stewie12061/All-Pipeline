@@ -14,7 +14,7 @@ spec:
         - -c
         - |
           dbPassword=$(cat /mnt/secrets/SA_PASSWORD)
-          /opt/mssql-tools/bin/sqlcmd -S 20.247.144.23,1433 -U sa -P $dbPassword -Q "
+          /opt/mssql-tools/bin/sqlcmd -S mssql.minhnhut.online -U sa -P $dbPassword -Q "
             USE [master]
             RESTORE DATABASE [1BOSS_$(deploymentName)]
             FROM DISK = N'/var/opt/mssql/1BOSS.bak'
