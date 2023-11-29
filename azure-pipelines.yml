@@ -54,59 +54,59 @@ jobs:
         }
       displayName: 'Replace Variables in YAML Templates'
 
-    # - task: KubernetesManifest@1
-    #   inputs:
-    #     action: 'deploy'
-    #     connectionType: 'azureResourceManager'
-    #     azureSubscriptionConnection: 'Azure subscription 1(224fc238-631d-456b-b3b0-bfc13f0458a7)'
-    #     azureResourceGroup: 'rg-api'
-    #     kubernetesCluster: 'API-Cluster'
-    #     useClusterAdmin: true
-    #     namespace: 'default'
-    #     manifests: |
-    #       $(Pipeline.Workspace)/manifests/job-restore-admin-db.yaml
-    #       $(Pipeline.Workspace)/manifests/job-restore-data-db.yaml
-    #   displayName: 'Deploy restore database job'
+    - task: KubernetesManifest@1
+      inputs:
+        action: 'deploy'
+        connectionType: 'azureResourceManager'
+        azureSubscriptionConnection: 'Azure subscription 1(224fc238-631d-456b-b3b0-bfc13f0458a7)'
+        azureResourceGroup: 'rg-api'
+        kubernetesCluster: 'API-Cluster'
+        useClusterAdmin: true
+        namespace: 'default'
+        manifests: |
+          $(Pipeline.Workspace)/manifests/job-restore-admin-db.yaml
+          $(Pipeline.Workspace)/manifests/job-restore-data-db.yaml
+      displayName: 'Deploy restore database job'
 
-    # - powershell: |
-    #     # Additional step to wait for the database to be ONLINE
-    #     $DatabaseName = "1BOSS_${{ parameters.deploymentName }}"
-    #     $ServerName = "20.247.144.23,1433"
+    - powershell: |
+        # Additional step to wait for the database to be ONLINE
+        $DatabaseName = "1BOSS_${{ parameters.deploymentName }}"
+        $ServerName = "20.247.144.23,1433"
 
-    #     Write-Host "Server Name: $ServerName"
-    #     Write-Host "Database Name: $DatabaseName"
+        Write-Host "Server Name: $ServerName"
+        Write-Host "Database Name: $DatabaseName"
 
-    #     # Infinite loop
-    #     while ($true) {
-    #         $connectionString = "Server=$ServerName;Database=master;User Id=sa;Password=pa55w0rd!;TrustServerCertificate=True;"
-    #         $databaseStatus = Invoke-Sqlcmd -ConnectionString $connectionString -Query "SELECT state_desc FROM sys.databases WHERE name = '$DatabaseName'"
-    #         $databaseState = $databaseStatus.state_desc
+        # Infinite loop
+        while ($true) {
+            $connectionString = "Server=$ServerName;Database=master;User Id=sa;Password=pa55w0rd!;TrustServerCertificate=True;"
+            $databaseStatus = Invoke-Sqlcmd -ConnectionString $connectionString -Query "SELECT state_desc FROM sys.databases WHERE name = '$DatabaseName'"
+            $databaseState = $databaseStatus.state_desc
 
-    #         Write-Host "Database state: $databaseState"
+            Write-Host "Database state: $databaseState"
 
-    #         if ($databaseState -eq "ONLINE") {
-    #             Write-Host "Database is now ONLINE. Proceeding with deployment."
-    #             break
-    #         }
-    #         Start-Sleep -Seconds 10  # Adjust the sleep interval as needed
-    #     }
-    #   displayName: 'Check database status'
+            if ($databaseState -eq "ONLINE") {
+                Write-Host "Database is now ONLINE. Proceeding with deployment."
+                break
+            }
+            Start-Sleep -Seconds 10  # Adjust the sleep interval as needed
+        }
+      displayName: 'Check database status'
 
-    # - task: KubernetesManifest@1
-    #   inputs:
-    #     action: 'deploy'
-    #     connectionType: 'azureResourceManager'
-    #     azureSubscriptionConnection: 'Azure subscription 1(224fc238-631d-456b-b3b0-bfc13f0458a7)'
-    #     azureResourceGroup: 'rg-api'
-    #     kubernetesCluster: 'API-Cluster'
-    #     useClusterAdmin: true
-    #     namespace: 'default'
-    #     manifests: |
-    #       $(Pipeline.Workspace)/manifests/api-deploy.yaml
-    #       $(Pipeline.Workspace)/manifests/job-ingress-add-host.yaml
-    #       $(Pipeline.Workspace)/manifests/cron-job-run-delete-deploy.yaml
-    #       $(Pipeline.Workspace)/manifests/cron-job-ingress-remove-host.yaml
-    #   displayName: 'Deploy api'
+    - task: KubernetesManifest@1
+      inputs:
+        action: 'deploy'
+        connectionType: 'azureResourceManager'
+        azureSubscriptionConnection: 'Azure subscription 1(224fc238-631d-456b-b3b0-bfc13f0458a7)'
+        azureResourceGroup: 'rg-api'
+        kubernetesCluster: 'API-Cluster'
+        useClusterAdmin: true
+        namespace: 'default'
+        manifests: |
+          $(Pipeline.Workspace)/manifests/api-deploy.yaml
+          $(Pipeline.Workspace)/manifests/job-ingress-add-host.yaml
+          $(Pipeline.Workspace)/manifests/cron-job-run-delete-deploy.yaml
+          $(Pipeline.Workspace)/manifests/cron-job-ingress-remove-host.yaml
+      displayName: 'Deploy api'
     
     - task: KubernetesManifest@1
       inputs:
@@ -119,6 +119,9 @@ jobs:
         manifests: |
           $(Pipeline.Workspace)/manifests/web-data.yaml
           $(Pipeline.Workspace)/manifests/web-config.yaml
-          
+          $(Pipeline.Workspace)/manifests/web-deploy.yaml
+          $(Pipeline.Workspace)/manifests/web-job-ingress-add-host.yaml
+          $(Pipeline.Workspace)/manifests/web-cron-job-run-delete-deploy.yaml
+          $(Pipeline.Workspace)/manifests/web-cron-job-ingress-remove-host.yaml
       displayName: 'Deploy web'
     
