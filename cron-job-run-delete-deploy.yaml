@@ -21,7 +21,6 @@ spec:
             - >
               kubectl delete deployment api-deploy-$(deploymentName) &&
               kubectl delete service api-clusterip-srv-$(deploymentName) &&
-              #kubectl delete service api-loadbalance-srv-$(deploymentName) &&
               sleep 300 &&
               kubectl delete cronjob cleanup-cron-job-$(deploymentName)
           initContainers:
