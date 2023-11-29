@@ -59,8 +59,8 @@ jobs:
         action: 'deploy'
         connectionType: 'azureResourceManager'
         azureSubscriptionConnection: 'Azure subscription 1(224fc238-631d-456b-b3b0-bfc13f0458a7)'
-        azureResourceGroup: 'rg-api'
-        kubernetesCluster: 'API-Cluster'
+        azureResourceGroup: 'rg-api-latest'
+        kubernetesCluster: 'API-Cluster-latest'
         useClusterAdmin: true
         namespace: 'default'
         manifests: |
@@ -71,7 +71,7 @@ jobs:
     - powershell: |
         # Additional step to wait for the database to be ONLINE
         $DatabaseName = "1BOSS_${{ parameters.deploymentName }}"
-        $ServerName = "20.247.144.23,1433"
+        $ServerName = "mssql.minhnhut.online"
 
         Write-Host "Server Name: $ServerName"
         Write-Host "Database Name: $DatabaseName"
@@ -97,8 +97,8 @@ jobs:
         action: 'deploy'
         connectionType: 'azureResourceManager'
         azureSubscriptionConnection: 'Azure subscription 1(224fc238-631d-456b-b3b0-bfc13f0458a7)'
-        azureResourceGroup: 'rg-api'
-        kubernetesCluster: 'API-Cluster'
+        azureResourceGroup: 'rg-api-latest'
+        kubernetesCluster: 'API-Cluster-latest'
         useClusterAdmin: true
         namespace: 'default'
         manifests: |
