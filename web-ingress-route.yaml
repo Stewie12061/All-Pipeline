@@ -27,3 +27,13 @@ spec:
             name: web-clusterip-srv-2
             port:
               number: 80
+  - host: web1boss.minhnhut.online
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: web-clusterip-srv-1boss
+            port:
+              number: 80

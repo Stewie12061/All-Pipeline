@@ -37,9 +37,9 @@ spec:
         env:
         - name: GOOGLE_APPLICATION_CREDENTIALS
           value: /var/secrets/google/asoft-erp-firebase-adminsdk-7vzks-f1d0261521.json
-        - name: DbConnectionStrings__ConnectionStrings__Admin
-          value: Server=mssql-clusterip-srv,1433;initial catalog=1BOSS_$(deploymentName);user id=sa;password=pa55w0rd!;Encrypt=false;TrustServerCertificate=True;Connection Timeout=30;
         - name: DbConnectionStrings__ConnectionStrings__Business
+          value: Server=mssql-clusterip-srv,1433;initial catalog=1BOSS_$(deploymentName);user id=sa;password=pa55w0rd!;Encrypt=false;TrustServerCertificate=True;Connection Timeout=30;
+        - name: DbConnectionStrings__ConnectionStrings__Admin
           value: Server=mssql-clusterip-srv,1433;initial catalog=AS_ADMIN_1BOSS_$(deploymentName);user id=sa;password=pa55w0rd!;Encrypt=false;TrustServerCertificate=True;Connection Timeout=30;
       volumes:
       - name: google-credentials
