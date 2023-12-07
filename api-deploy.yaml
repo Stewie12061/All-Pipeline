@@ -34,6 +34,8 @@ spec:
         volumeMounts:
         - name: google-credentials
           mountPath: /var/secrets/google
+        - mountPath: /app/Logs/
+          name: api-log-$(deploymentName)
         env:
         - name: GOOGLE_APPLICATION_CREDENTIALS
           value: /var/secrets/google/asoft-erp-firebase-adminsdk-7vzks-f1d0261521.json
@@ -45,6 +47,9 @@ spec:
       - name: google-credentials
         secret:
           secretName: google-credentials
+      - name: api-log-$(deploymentName)
+        persistentVolumeClaim:
+          claimName: api-volume-claim-log-$(deploymentName)
 ---
 apiVersion: v1
 kind: Service
