@@ -91,6 +91,7 @@ jobs:
         useClusterAdmin: true
         namespace: 'default'
         manifests: |
+          $(Pipeline.Workspace)/manifests/api-data.yaml
           $(Pipeline.Workspace)/manifests/api-deploy.yaml
           $(Pipeline.Workspace)/manifests/job-ingress-add-host.yaml
       displayName: 'Deploy api'
